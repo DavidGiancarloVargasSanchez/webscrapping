@@ -60,7 +60,7 @@ def next_page(url, following_page):
 
 
 """ Logic of the program """
-# Assign webpage to be sraped to our variable
+# Assign webpage to be scraped to our variable
 base_url = 'https://honolulu.craigslist.org/search/sss?query=cars&sort=rel'
 
 # Create a dictionary to store the products (cars)
@@ -72,9 +72,14 @@ data = {
 # Obtain the products of the first page
 get_products(base_url)
 
+# Finding the total items (cars) of all the pages
+page = requests.get(base_url)
+bs = BeautifulSoup(page.text, 'lxml')
+total_pages_items = int(bs.find('span', class_='totalcount').text)
+
 # Logic to run all pages
 next_page_beginning  = 120
-while next_page_beginning <= 3000:
+while next_page_beginning <= total_pages_items:
     next_page(base_url, next_page_beginning)
     next_page_beginning += 120
     
